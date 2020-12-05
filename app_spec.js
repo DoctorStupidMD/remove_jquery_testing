@@ -17,6 +17,7 @@ function pressEnterKey(input) {
   var enterKeyEvent = document.createEvent('Event');
   enterKeyEvent.initEvent('keyup');
   enterKeyEvent.keyCode = 13;
+  enterKeyEvent.which = 13;
   input.dispatchEvent(enterKeyEvent);
 }
 
@@ -35,6 +36,7 @@ function clickToggleAllButton() {
 }
 
 tests({
+  
   'It should add a todo.': function() {
     resetList();
     createTodo();
@@ -72,22 +74,22 @@ tests({
     eq(toggleButtons[0].checked, true);
     eq(toggleButtons[1].checked, true);
   },
+'It should edit and update a todo.': function() {
+  resetList();
+  var todo = createTodo();
+  var todoInput = todo.querySelector('input.edit');
+  var todoLabel = todo.querySelector('label');
+  var todoTitleRevised = 'Edited';
+  enableEditing(todoLabel);
+  todoInput.dispatchEvent(new Event('focus'));
+  todoInput.value = todoTitleRevised;
 
-  'It should edit a todo.': function() {
-    resetList();
-    var todo = createTodo();
-    var todoInput = todo.querySelector('input.edit');
-    var todoLabel = todo.querySelector('label');
-    var todoTitleEdited = 'Edited';
-
-    enableEditing(todoLabel);
-    todoInput.dispatchEvent(new Event('focus'));
-    todoInput.value = todoTitleEdited;
+  window.setTimeout(function () { 
     todoInput.dispatchEvent(new Event('blur'));
-
     var todoLabelAfterRender = document.querySelector('#todo-list label');
-    eq(todoLabelAfterRender.textContent, todoTitleEdited);
-  },
+    eq(todoLabelAfterRender.textContent, todoTitleRevised);
+}, 0); 
+},
 
   // 'It should not contain a Handlebars script tag.': function() {
   //   var nodeListScripts = document.querySelectorAll('script');
@@ -131,5 +133,6 @@ tests({
     eq(appjsScriptTags.length, 1);
     eq(JSON.stringify(appjsScriptTags[0].outerHTML), JSON.stringify('<script src="app.js"></script>'));
   }
+
 });
 
