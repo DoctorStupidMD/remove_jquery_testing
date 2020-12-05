@@ -74,36 +74,22 @@ tests({
     eq(toggleButtons[0].checked, true);
     eq(toggleButtons[1].checked, true);
   },
+  
 'It should edit and update a todo.': function() {
   resetList();
+
   var todo = createTodo();
   var todoInput = todo.querySelector('input.edit');
   var todoLabel = todo.querySelector('label');
   var todoTitleRevised = 'Edited';
   enableEditing(todoLabel);
-  todoInput.dispatchEvent(new Event('focus'));
+
+  todoInput.focus();
   todoInput.value = todoTitleRevised;
-
-  window.setTimeout(function () { 
-    todoInput.dispatchEvent(new Event('blur'));
-    var todoLabelAfterRender = document.querySelector('#todo-list label');
-    eq(todoLabelAfterRender.textContent, todoTitleRevised);
-}, 0); 
+  todoInput.blur();
+  var todoLabelAfterRender = document.querySelector('#todo-list label')
+  eq(todoLabelAfterRender.textContent, todoTitleRevised);
 },
-
-  // 'It should not contain a Handlebars script tag.': function() {
-  //   var nodeListScripts = document.querySelectorAll('script');
-  //   var handlebarsScriptTags = [];
-  //   function findScriptTags() {
-  //     for (var i = 0; i < nodeListScripts.length; i++) {
-  //       if (nodeListScripts[i].outerHTML === '<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>') {
-  //         handlebarsScriptTags.push(nodeListScripts[i]);
-  //       }
-  //     }
-  //   }
-  //   findScriptTags();
-  //   eq(handlebarsScriptTags.length, 0);
-  // },
 
   'It should not contain a jQuery script tag.': function() {
     var nodeListScripts = document.querySelectorAll('script');
